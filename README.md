@@ -21,7 +21,7 @@ typedef struct s_libmlc
 
 ### public functions
 
-`void	\*libmlc_malloc(t_libmlc **libmlc, size_t size);`
+`void	*libmlc_malloc(t_libmlc **libmlc, size_t size);`
 
 Allocates size bytes using malloc and returns the address.
 
