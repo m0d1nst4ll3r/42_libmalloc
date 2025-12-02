@@ -6,25 +6,11 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 11:41:22 by rapohlen          #+#    #+#             */
-/*   Updated: 2025/11/12 12:48:11 by rapohlen         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:04:34 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmalloc.h"
-
-static int	libmlc_is_tab_empty(void *tab[LIBMLC_SIZE])
-{
-	int	i;
-
-	i = 0;
-	while (i < LIBMLC_SIZE)
-	{
-		if (tab[i])
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 static int	libmlc_remove_addr(void *tab[LIBMLC_SIZE], void *p)
 {
@@ -44,9 +30,9 @@ static int	libmlc_remove_addr(void *tab[LIBMLC_SIZE], void *p)
 	return (0);
 }
 
-// Gotta find where p is, then check if the tab is empty, and if so, remove node
-// To remove node, need a last
-// To find p, and check if it's empty, need a i
+// finding where p is can take VERY long if there are lots of addresses
+// since we add front, newer addresses will be checked first
+// a lower LIBMLC_SIZE will use more memory but force newer addresses forward
 void	libmlc_free(t_libmlc **libmlc, void *p)
 {
 	t_libmlc	*iter;
@@ -57,7 +43,8 @@ void	libmlc_free(t_libmlc **libmlc, void *p)
 	{
 		if (libmlc_remove_addr(iter->tab, p))
 		{
-			if (libmlc_is_tab_empty(iter->tab))
+			iter->avail++;
+			if (iter->avail == LIBMLC_SIZE)
 			{
 				if (iter == *libmlc)
 					*libmlc = iter->next;

@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 11:05:21 by rapohlen          #+#    #+#             */
-/*   Updated: 2025/11/12 11:36:22 by rapohlen         ###   ########.fr       */
+/*   Updated: 2025/12/02 12:07:27 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 
 # include <stdlib.h>
 
-# define LIBMLC_SIZE	64
+# define LIBMLC_SIZE	32
 
 typedef struct s_libmlc
 {
 	void			*tab[LIBMLC_SIZE];
+	int				avail;
 	struct s_libmlc	*next;
 }t_libmlc;
 

@@ -6,7 +6,7 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 11:04:50 by rapohlen          #+#    #+#             */
-/*   Updated: 2025/11/12 12:52:03 by rapohlen         ###   ########.fr       */
+/*   Updated: 2025/12/02 11:51:52 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	libmlc_init_tab(void *tab[LIBMLC_SIZE])
 	}
 }
 
+// This is always called to add something so we can init avail to max - 1
 static t_libmlc *libmlc_create_elem(void)
 {
 	t_libmlc	*new;
@@ -32,6 +33,7 @@ static t_libmlc *libmlc_create_elem(void)
 	if (!new)
 		return (new);
 	libmlc_init_tab(new->tab);
+	new->avail = LIBMLC_SIZE - 1;
 	return (new);
 }
 
@@ -55,14 +57,18 @@ static int	libmlc_add_first_null(t_libmlc *libmlc, void *to_add)
 	while (libmlc)
 	{
 		i = 0;
-		while (i < LIBMLC_SIZE)
+		if (libmlc->avail)
 		{
-			if (!libmlc->tab[i])
+			while (i < LIBMLC_SIZE)
 			{
-				libmlc->tab[i] = to_add;
-				return (1);
+				if (!libmlc->tab[i])
+				{
+					libmlc->tab[i] = to_add;
+					libmlc->avail--;
+					return (1);
+				}
+				i++;
 			}
-			i++;
 		}
 		libmlc = libmlc->next;
 	}
