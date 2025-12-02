@@ -6,11 +6,17 @@
 /*   By: rapohlen <rapohlen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 11:04:50 by rapohlen          #+#    #+#             */
-/*   Updated: 2025/12/02 11:51:52 by rapohlen         ###   ########.fr       */
+/*   Updated: 2025/12/02 14:25:06 by rapohlen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libmalloc.h"
+
+static void	libmlc_error(t_libmlc **libmlc)
+{
+	libmlc_free_all(libmlc);
+	exit(LIBMLC_ERRET);
+}
 
 static void	libmlc_init_tab(void *tab[LIBMLC_SIZE])
 {
@@ -81,14 +87,11 @@ void	*libmlc_malloc(t_libmlc **libmlc, size_t size)
 
 	new = malloc(size);
 	if (!new)
-		return (new);
+		libmlc_error(libmlc);
 	if (!libmlc_add_first_null(*libmlc, new))
 	{
 		if (!libmlc_add_new(libmlc, new))
-		{
-			free(new);
-			return (NULL);
-		}
+			libmlc_error(libmlc);
 	}
 	return (new);
 }
